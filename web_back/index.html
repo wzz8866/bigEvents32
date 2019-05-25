@@ -41,7 +41,7 @@
 
             <div class="level01"><a href="comment_list.html" target="main_frame"><i
                         class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-            <div class="level01"><a href="user.html" target="main_frame"><i
+            <div class="level01"><a href="user.html" target="main_frame" class="user_center"><i
                         class="iconfont icon-user"></i><span>个人中心</span></a></div>
         </div>
     </div>
@@ -52,7 +52,7 @@
             <i class="iconfont icon-search"></i>
         </form>
         <div class="user_center_link">
-            <a href="user.html" onclick="setMenu(3,0)" target="main_frame">个人中心</a>
+            <a href="user.html" onclick="setMenu(3,0)" target="main_frame" class="user_center">个人中心</a>
             <img src="images/2.jpg" alt="person">
             <a href="#"><i class="iconfont icon-tuichu"></i> 退出</a>
         </div>
@@ -139,6 +139,8 @@
 </html>
 
 <script>
+    // 1.登出功能
+
     // 思路:
     // 1.点击退出按钮,需要弹出提示框,(是否要退出),
     // 2,如果点击确认,则用ajax调用接口,根据数据返回的值判断是否退出成功,如果退出成功,则回到登录页面
@@ -173,5 +175,42 @@
                 }
             });
         });
+        // 2.获取用户信息
+        // 请求地址：/admin/getuser
+
+        // 请求方式：get
+        $.ajax({
+            url:"https://autumnfish.cn/big/admin/getuser",
+            type:"get",
+            success:function(dataBack) {
+                console.log(dataBack);
+                $(".user_info img").attr("src",dataBack.data.user_pic);
+                $(".user_info span").text(dataBack.data.nickname);
+                $(".user_center_link img").attr("src",dataBack.data.user_pic);
+            }
+        });
+
+        // // 3.点击个人中心,获取用户详情信息渲染到user.html页面上
+        // // 获取用户信息
+        // // 请求地址：/admin/userinfo_get
+
+        // // 请求方式：get
+
+        // // 请求参数：无
+        // $(".user_center").on("click",function() {
+        //     $.ajax({
+        //         url:"https://autumnfish.cn/big/admin/userinfo_get",
+        //         type:"get",
+        //         success:function(dataBack) {
+        //             console.log(dataBack);
+
+                    
+        //         }
+        //     })
+        // })
+
     });
+
+    
+
 </script>
