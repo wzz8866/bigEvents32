@@ -183,7 +183,7 @@
             url:"https://autumnfish.cn/big32/admin/getuser",
             type:"get",
             success:function(dataBack) {
-                console.log(dataBack);
+                // console.log(dataBack);
                 $(".user_info img").attr("src",dataBack.data.user_pic);
                 $(".user_info i").text(dataBack.data.nickname);
                 $(".user_center_link img").attr("src",dataBack.data.user_pic);

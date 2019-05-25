@@ -24,19 +24,19 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" class="form-control" id="inputEmail3" name="username" value="李思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail4" value="思思">
+                        <input type="text" class="form-control" id="inputEmail4" name="nickname" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail5" value="lisisi@126.com">
+                        <input type="text" class="form-control" id="inputEmail5" name="email" value="lisisi@126.com">
                     </div>
                 </div>
 
@@ -44,14 +44,14 @@
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
                         <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" id="exampleInputFile" name="user_pic">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
-                        <input type="password" class="form-control" id="inputEmail6" value="12345678">
+                        <input type="password" class="form-control" id="inputEmail6" value="12345678" name="password">
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
             url: "https://autumnfish.cn/big32/admin/userinfo_get",
             type: "get",
             success: function (dataBack) {
-                console.log(dataBack);
+                // console.log(dataBack);
                 $("#inputEmail3").val(dataBack.data.username);
                 $("#inputEmail4").val(dataBack.data.nickname);
                 $("#inputEmail5").val(dataBack.data.email);
@@ -84,6 +84,32 @@
                 $(".user_pic").attr("src", dataBack.data.user_pic);
 
             }
+        });
+
+
+        // 选择本地图片在页面上预览
+        // 给input的file注册change事件
+        $("#exampleInputFile").on("change", function () {
+            // console.log(this.files);
+            
+            // files是dom元素的属性
+            var file = this.files[0];
+            
+            // 生成url
+            var url = URL.createObjectURL(file)
+            // 设置给img
+            $(this)
+                .prev()
+                .attr('src', url)
         })
+
+        // 编辑用户信息
+        // 因为要提交formData数据,要找到所有from表单的input,设置name属性
+        // $(".btn-success").on("click",function(e) {
+        //     e.preventDefault();
+        //     // 实例化formData对象
+        //     var formData = new FormData($('form')[0])
+
+        // })
     })
 </script>
