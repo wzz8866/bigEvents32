@@ -91,11 +91,11 @@
                     <form>
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control" id="recipient_name">
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control" id="recipient_slum">
                         </div>
                     </form>
                 </div>
@@ -114,14 +114,11 @@
         });
 
         $('#model_shutoff').click(function () {
-            alert('shutoff');
+            // alert('shutoff');
             $('#addModal').modal('hide');
         });
 
-        $('#model_add').click(function () {
-            alert('add');
-            $('#addModal').modal('hide');
-        });
+
 
         $('.category_table').delegate('a', 'click', function () {
             if ($(this).hasClass('btn-info')) {
@@ -156,17 +153,56 @@
             //   思路:
             // 1.页面一打开,ajax调用文章类别接口
             // 2.获取数据,用模板引擎渲染到页面上
-            $.ajax({
-                url: "https://autumnfish.cn/big32/admin/category_search",
-                type: "get",
-                success: function (dataBack) {
-                    // console.log(dataBack);
-                    // 利用模板引擎处理数据 4步
-                    // 调用模板引擎方法
-                    var html = template("get_calss",dataBack);
-                    // 添加到tbody中
-                    $("tbody").html(html);
-                }
+            function get_class() {
+                $.ajax({
+                    url: "https://autumnfish.cn/big32/admin/category_search",
+                    type: "get",
+                    success: function (dataBack) {
+                        // console.log(dataBack);
+                        // 利用模板引擎处理数据 4步
+                        // 调用模板引擎方法
+                        var html = template("get_calss", dataBack);
+                        // 添加到tbody中
+                        $("tbody").html(html);
+                    }
+                });
+            };
+
+            // 页面一打开要调用方法获取一次
+            get_class();
+
+
+            // 2.新增文章分类
+            // 请求地址：https://autumnfish.cn/big32/admin/category_add
+            // 请求方式：post
+            // 请求参数：
+            // 名称	类型	说明
+            // name	string	类别名称
+            // slug	string	别名
+            // 思路:
+            // 1,点击新增分类按钮,弹出选填框,已做
+            // 2,点击弹出框的新增按钮,获取文本框的内容,ajax调用接口,当做参数传递接口
+            // 3,接口返回添加成功之后,页面需要重新获取文章类别
+            $('#model_add').click(function () {
+                var recipient_name = $("#recipient_name").val();
+                var recipient_slum = $("#recipient_slum").val();
+                // ajax
+                $.ajax({
+                    url: "https://autumnfish.cn/big32/admin/category_add",
+                    type: "post",
+                    data: {
+                        name: recipient_name,
+                        slug: recipient_slum
+                    },
+                    success: function (dataBack) {
+                        // console.log(dataBack);
+                        if (dataBack.code == 200) {
+                            // 调用获取类别的方法
+                            get_class();
+                        }
+                    }
+                });
+                $('#addModal').modal('hide');
             });
         });
     </script>
