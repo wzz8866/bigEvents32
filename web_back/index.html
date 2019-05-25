@@ -22,7 +22,7 @@
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
             <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <span>欢迎&nbsp;&nbsp;<i>李思思</i></span>
             <b>管理员</b>
         </div>
         <div class="menu">
@@ -163,7 +163,7 @@
         $(".btn-primary").on("click", function () {
             // ajax
             $.ajax({
-                url: "https://autumnfish.cn/big/admin/logout",
+                url: "https://autumnfish.cn/big32/admin/logout",
                 type: "post",
                 success: function (dataBack) {
                     // console.log(dataBack);
@@ -180,12 +180,12 @@
 
         // 请求方式：get
         $.ajax({
-            url:"https://autumnfish.cn/big/admin/getuser",
+            url:"https://autumnfish.cn/big32/admin/getuser",
             type:"get",
             success:function(dataBack) {
                 console.log(dataBack);
                 $(".user_info img").attr("src",dataBack.data.user_pic);
-                $(".user_info span").text(dataBack.data.nickname);
+                $(".user_info i").text(dataBack.data.nickname);
                 $(".user_center_link img").attr("src",dataBack.data.user_pic);
             }
         });
