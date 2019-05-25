@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
 
 </head>
 
@@ -65,6 +66,25 @@
         </div>
     </div>
 
+    <!-- bootstrap结构 -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提示框</h4>
+                </div>
+                <div class="modal-body my_text">
+                    信息修改成功
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
@@ -91,25 +111,45 @@
         // 给input的file注册change事件
         $("#exampleInputFile").on("change", function () {
             // console.log(this.files);
-            
+
             // files是dom元素的属性
             var file = this.files[0];
-            
+
             // 生成url
             var url = URL.createObjectURL(file)
             // 设置给img
             $(this)
                 .prev()
                 .attr('src', url)
-        })
+        });
 
         // 编辑用户信息
         // 因为要提交formData数据,要找到所有from表单的input,设置name属性
-        // $(".btn-success").on("click",function(e) {
-        //     e.preventDefault();
-        //     // 实例化formData对象
-        //     var formData = new FormData($('form')[0])
 
-        // })
+        // 请求地址：https://autumnfish.cn/big32/admin/userinfo_edit
+
+        // 请求方式：post
+
+        // 请求参数：使用formdata提交
+        $(".btn-success").on("click", function (e) {
+            e.preventDefault();
+            // 实例化formData对象
+            var formData = new FormData($('form')[0]);
+            $.ajax({
+                url: "https://autumnfish.cn/big32/admin/userinfo_edit",
+                type: "post",
+                data: formData, contentType: false, processData: false,
+                success: function (dataBack) {
+                    // console.log(dataBack);
+                    // 弹出提示框
+                    if(dataBack.code==200) {
+                        $('#myModal').modal();
+
+                    };
+
+                }
+            })
+
+        })
     })
 </script>
