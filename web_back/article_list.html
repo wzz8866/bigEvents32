@@ -274,7 +274,71 @@
             window.parent.setMenu(1,1);
         })
     </script>
+    <!-- 自己的代码 -->
+    <!-- 引入模板 -->
+    <script src="./js/template-web.js"></script>
+    <!-- 写模板 -->
+    <script id="article" type="text/html">
+        {{each data}}
+            <tr>
+                        
+                <td>{{$value.title}}</td>
+                <td>杰克</td>
+                <td>奇趣事</td>
+                <td class="text-center">{{$value.date}}</td>
 
+
+                <td class="text-center">{{$value.state}}</td>
+
+
+                <td class="text-center">
+                    <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                    <a href="javascript:deleteTr( 1005 );" class="btn btn-danger btn-xs">删除</a>
+                </td>
+            </tr>
+        {{/each}}
+    </script>
+    <script>
+        // 1.文章搜索
+            // 请求地址：http://localhost:8000/admin/search
+            // 请求方式：get
+            // 请求参数：
+            // 名称	类型	说明
+            // key	string	搜索关键词，可以为空，为空返回某类型所有文章
+            // type	string	文章类型，可以为空，为空返回所有类型文章
+            // state	string	文章状态，草稿或者已发布
+            // page	number	当前页，为空返回第1页
+            // perpage	number	每页显示条数，为空默认每页6条
+        // 思路:
+        // 1.页面一打开,用ajax调用接口, 注意的是当前页码和也容量要用变量表示
+        $(function() {
+            var page = 1;
+            var perpage = 8;
+
+            $.ajax({
+                url:"http://localhost:8000/admin/search",
+                type:"get",
+                data:{
+                    key:"",
+                    type:"",
+                    state:"",
+                    page:page,
+                    perpage:perpage
+                },
+                success:function(dataBack) {
+                    console.log(dataBack);
+                    // 总页数
+                    // 页码服务器没有返回
+
+                    // 利用模板引擎处理数据 4步
+                    var html = template("article",dataBack);
+                    $("tbody").html(html);
+                    
+                }
+            });
+            
+        });
+    </script>
 </body>
 
 </html>

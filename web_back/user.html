@@ -29,13 +29,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
+                    <label for="inputEmail4" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="inputEmail4" name="nickname" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
+                    <label for="inputEmail5" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="inputEmail5" name="email" value="lisisi@126.com">
                     </div>
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <label for="inputEmail6" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
                         <input type="password" class="form-control" id="inputEmail6" value="12345678" name="password">
                     </div>
@@ -93,7 +93,7 @@
     $(function () {
         // 页面加载完毕后,把获取到的数据渲染到页面上
         $.ajax({
-            url: "https://autumnfish.cn/big32/admin/userinfo_get",
+            url: "http://localhost:8000/admin/userinfo_get",
             type: "get",
             success: function (dataBack) {
                 // console.log(dataBack);
@@ -126,7 +126,7 @@
         // 编辑用户信息
         // 因为要提交formData数据,要找到所有from表单的input,设置name属性
 
-        // 请求地址：https://autumnfish.cn/big32/admin/userinfo_edit
+        // 请求地址：http://localhost:8000/admin/userinfo_edit
 
         // 请求方式：post
 
@@ -136,7 +136,7 @@
             // 实例化formData对象
             var formData = new FormData($('form')[0]);
             $.ajax({
-                url: "https://autumnfish.cn/big32/admin/userinfo_edit",
+                url: "http://localhost:8000/admin/userinfo_edit",
                 type: "post",
                 data: formData, contentType: false, processData: false,
                 success: function (dataBack) {

@@ -163,7 +163,7 @@
         $(".btn-primary").on("click", function () {
             // ajax
             $.ajax({
-                url: "https://autumnfish.cn/big32/admin/logout",
+                url: "http://localhost:8000/admin/logout",
                 type: "post",
                 success: function (dataBack) {
                     // console.log(dataBack);
@@ -180,7 +180,7 @@
 
         // 请求方式：get
         $.ajax({
-            url:"https://autumnfish.cn/big32/admin/getuser",
+            url:"http://localhost:8000/admin/getuser",
             type:"get",
             success:function(dataBack) {
                 // console.log(dataBack);
