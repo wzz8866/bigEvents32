@@ -25,12 +25,12 @@
                 <div class="col-xs-6">
                     <form class="form-inline">
                         <select id="selCategory" name="" class="form-control input-sm">
-                            <option>所有分类</option>
+                            <option value="">所有分类</option>
                         </select>
                         <select id="selStatus" name="" class="form-control input-sm">
-                            <option>所有状态</option>
-                            <option value="drafted">草稿</option>
-                            <option value="published">已发布</option>
+                            <option value="">所有状态</option>
+                            <option value="草稿">草稿</option>
+                            <option value="已发布">已发布</option>
                         </select>
                         <button id="btnSearch" class="btn btn-default btn-sm">筛选</button>
                     </form>
@@ -279,7 +279,7 @@
     <!-- 文章类别模板 -->
     <script id="getClass" type="text/html">
         {{each data}}
-        <option>{{$value.name}}</option>
+        <option value="{{$value.id}}">{{$value.name}}</option>
         {{/each}}
     </script>
 
@@ -358,11 +358,13 @@
                     url: "http://localhost:8000/admin/search",
                     type: "get",
                     data: {
+                        type: $("#selCategory").val(),
+                        state: $("#selStatus").val(),
                         page: page1,
                         perpage: perpage
                     },
                     success: function (dataBack) {
-                        console.log(dataBack);
+                        // console.log(dataBack);
                         // 总页数
                         // 页码服务器没有返回
 
@@ -390,8 +392,14 @@
                 }
             });
 
-            // 筛选分类功能
-
+            // 3,筛选分类功能
+            // 思路:
+            // 点击筛选按钮,获取分类下拉框的id,和状态下拉框的文本
+            // 注意点,如果下拉框中option标签设置value属性时,$(option).val()获取的是value值,如果不设置获取的是标签内容
+            $("#btnSearch").on("click", function (e) {
+                e.preventDefault();
+                search();
+            });
 
         });
 
