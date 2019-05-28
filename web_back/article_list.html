@@ -350,6 +350,8 @@
             // 1.页面一打开,用ajax调用接口, 注意的是当前页码和也容量要用变量表示
             var page1 = 1;
             var perpage = 8;
+            // 假设一个总也数为10页
+            var totalPagesTarget = 8;
             // 页面打开时调用一次
             search();
 
@@ -366,9 +368,18 @@
                     },
                     success: function (dataBack) {
                         // console.log(dataBack);
-                        // 总页数
-                        // 页码服务器没有返回
-                        // 把总页码数藏在某个地方 隐藏域中
+
+                        // 框架修改总页数
+                        var totalPages = dataBack.totalPage;
+                        var currentPage = 1;
+                        if (totalPagesTarget != totalPages) {
+                            totalPagesTarget = totalPages;
+                            $pagination.twbsPagination('destroy');
+                            $pagination.twbsPagination($.extend({}, defaultOpts, {
+                                startPage: 1,
+                                totalPages: totalPages
+                            }));
+                        }
                         // $("#totalPage").val(dataBack.totalPage);
                         // 利用模板引擎处理数据 4步
                         var html = template("article", dataBack);
@@ -381,7 +392,8 @@
             // GitHup分页的框架
             // 调用分页框架
 
-            $('.pagination-sm').twbsPagination({
+            var $pagination = $('.pagination-sm');
+            var defaultOpts = {
                 totalPages: 35,
                 visiblePages: 7,
                 first: '第一页',
@@ -393,7 +405,11 @@
                     // 重新获取文章数据
                     search();
                 }
-            });
+            };
+            $pagination.twbsPagination(defaultOpts)
+
+
+
 
 
 
@@ -430,19 +446,6 @@
                 })
             };
 
-            // 5.发表文章 formDate类型数据
-            // 请求地址：http://localhost:8000/admin/article_publish
-            // 请求方式：post
-            // 请求参数：formData
-            // 名称	类型	说明
-            // title	string	文章标题
-            // cover	file	文章封面图片
-            // type	number	文章类型id
-            // date	string	日期
-            // content	string	文章内容
-            // state	string	文章状态(草稿或已发布)
-            // 思路:
-            // 1,点击发布按钮,获取form表单元素的所有input内容,
 
         });
 
