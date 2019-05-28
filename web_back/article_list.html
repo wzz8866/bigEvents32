@@ -265,6 +265,8 @@
 
         </div>
     </div>
+    <!-- 隐藏域 用来隐藏总页数 -->
+    <!-- <input type="text" id="totalPage"> -->
 
     <script>
         // 设置左侧菜单
@@ -299,7 +301,7 @@
 
                 <td class="text-center">
                     <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-                    <a href="javascript:deleteTr( 1005 );" class="btn btn-danger btn-xs">删除</a>
+                    <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
                 </td>
             </tr>
         {{/each}}
@@ -348,7 +350,6 @@
             // 1.页面一打开,用ajax调用接口, 注意的是当前页码和也容量要用变量表示
             var page1 = 1;
             var perpage = 8;
-
             // 页面打开时调用一次
             search();
 
@@ -367,7 +368,8 @@
                         // console.log(dataBack);
                         // 总页数
                         // 页码服务器没有返回
-
+                        // 把总页码数藏在某个地方 隐藏域中
+                        // $("#totalPage").val(dataBack.totalPage);
                         // 利用模板引擎处理数据 4步
                         var html = template("article", dataBack);
                         $("tbody").html(html);
@@ -378,6 +380,7 @@
 
             // GitHup分页的框架
             // 调用分页框架
+
             $('.pagination-sm').twbsPagination({
                 totalPages: 35,
                 visiblePages: 7,
@@ -392,6 +395,8 @@
                 }
             });
 
+
+
             // 3,筛选分类功能
             // 思路:
             // 点击筛选按钮,获取分类下拉框的id,和状态下拉框的文本
@@ -400,6 +405,44 @@
                 e.preventDefault();
                 search();
             });
+
+
+
+            // 4.删除文章 ,调用方法,因为a标签中在调用这个方法
+            window.deleteTr = function (num) {
+                var id = parseInt($.trim(num));
+                // console.log(id);
+
+                // ajax
+                $.ajax({
+                    url: "http://localhost:8000/admin/article_delete",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (dataBack) {
+                        // console.log(dataBack);
+                        if (dataBack.code == 200) {
+                            search();
+                        }
+
+                    }
+                })
+            };
+
+            // 5.发表文章 formDate类型数据
+            // 请求地址：http://localhost:8000/admin/article_publish
+            // 请求方式：post
+            // 请求参数：formData
+            // 名称	类型	说明
+            // title	string	文章标题
+            // cover	file	文章封面图片
+            // type	number	文章类型id
+            // date	string	日期
+            // content	string	文章内容
+            // state	string	文章状态(草稿或已发布)
+            // 思路:
+            // 1,点击发布按钮,获取form表单元素的所有input内容,
 
         });
 
