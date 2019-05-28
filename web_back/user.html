@@ -135,6 +135,7 @@
             e.preventDefault();
             // 实例化formData对象
             var formData = new FormData($('form')[0]);
+            
             $.ajax({
                 url: "http://localhost:8000/admin/userinfo_edit",
                 type: "post",

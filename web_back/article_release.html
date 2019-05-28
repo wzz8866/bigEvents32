@@ -15,7 +15,14 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <style>
+        #my_img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
 </head>
+
 
 <body>
     <div class="container-fluid">
@@ -27,24 +34,22 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="email" class="form-control" id="inputEmail3" name="title" placeholder="文章标题">
                     </div>
                 </div>
                 <div class="form-group">
+
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <input type="file" id="exampleInputFile">
+                        <img src="./images/2.jpg" alt="" id="my_img">
+                        <input type="file" id="exampleInputFile" name="cover">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select class="form-control" name="type">
+                            <option value=""></option>
                         </select>
                     </div>
                 </div>
@@ -53,7 +58,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput" name="date">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -65,13 +70,15 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="rich_content" name="content" placeholder="文章内容">
+                        <textarea class="form-control" id="rich_content" placeholder="文章内容"
+                            name="content">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda fugiat illo nihil molestias ab. Laborum eius non atque, totam sapiente quae obcaecati assumenda ratione inventore pariatur maiores, qui libero delectus.
                             </textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
+                        <!-- <input type="button" value="已发布" class="btn btn-success"> -->
                         <button type="submit" class="btn btn-success">发布</button>
                         <button type="submit" class="btn btn-default">存为草稿</button>
                     </div>
@@ -81,5 +88,104 @@
     </div>
 
 </body>
+
+<!-- 自己的js代码 -->
+<!-- 导入模板 -->
+<script src="./js/template-web.js"></script>
+<!-- 写模板 -->
+<script id="search" type="text/html">
+    {{each data}}
+    <option value="{{$value.id}}">{{$value.name}}</option>
+    {{/each}}
+</script>
+<script>
+    $(function () {
+
+        // 设置文章类别
+        // 文章类别搜索
+        // 请求地址：http://localhost:8000/admin/category_search
+
+        // 请求方式：get
+
+        // 请求参数：无
+
+        // 返回数据：
+
+        // 名称	类型	说明
+        // id	number	类别
+        // name	string	类别名称
+        // slug	string	别名
+        $.ajax({
+            url: "http://localhost:8000/admin/category_search",
+            type: "get",
+            success: function (dataBack) {
+                // console.log(dataBack);
+                // 模板引擎
+                var html = template("search", dataBack);
+                // 渲染
+                $(".form-control").html(html);
+            }
+        });
+
+        // 图片预览
+        $("#exampleInputFile").on("change", function () {
+            // files是dom元素的属性
+            var file = this.files[0];
+            // 生成url
+            var url = URL.createObjectURL(file);
+            $("#my_img").attr("src", url);
+        });
+        // 1.发表文章 formDate类型数据
+        // 请求地址：http://localhost:8000/admin/article_publish
+        // 请求方式：post
+        // 请求参数：formData
+        // 名称	类型	说明
+        // title	string	文章标题
+        // cover	file	文章封面图片
+        // type	number	文章类型id
+        // date	string	日期
+        // content	string	文章内容
+        // state	string	文章状态(草稿或已发布)
+        // 思路:
+        // 1,点击发布按钮,获取form表单元素的所有input内容,
+        // 封装
+        function setarticle() {
+            
+            // 实例化formdata对象
+            var formdata = new FormData($("form")[0]);
+            // 数据获取不全,追加数据
+            // 追加富文本内容
+            formdata.append("content",tinyMCE.activeEditor.getContent());
+            // 追加文章状态数据
+            formdata.append("state","草稿");
+            // console.log(formdata);
+            // ajax
+            $.ajax({
+                url: "http://localhost:8000/admin/article_publish",
+                type: "post",
+                data: formdata, contentType: false, processData: false,
+                success: function (dataBack) {
+                    console.log(dataBack);
+
+                }
+
+            })
+        }
+
+        $(".btn-success").on("click", function (e) {
+            e.preventDefault();
+            // 设置name属性
+            
+            setarticle();
+
+        });
+        $(".btn-default").on("click", function (e) {
+            e.preventDefault();
+
+            setarticle();
+        });
+
+    });
+</script>
 
 </html>
