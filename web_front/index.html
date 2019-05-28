@@ -231,7 +231,8 @@
             {{else}}
                 <li>
             {{/if}}
-                    <a href="#"><img src="{{$value.cover}}" alt=""></a>
+                    <!-- 因为点击a标签要跳转到另一个页面,并且渲染a标签当前的标题内容,所以要带个id,以便于获取当前这个 -->
+                    <a href="./article.html?id={{$value.id}}" target="_blank"><img src="{{$value.cover}}" alt=""></a>
                     <p>{{$value.title}}</p>
                 </li>
             
