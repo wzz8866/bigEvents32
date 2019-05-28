@@ -15,6 +15,8 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <!-- 导入弹框框架 -->
+
     <style>
         #my_img {
             width: 100px;
@@ -70,8 +72,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="rich_content" placeholder="文章内容"
-                            name="content">
+                        <textarea class="form-control" id="rich_content" placeholder="文章内容" name="content">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda fugiat illo nihil molestias ab. Laborum eius non atque, totam sapiente quae obcaecati assumenda ratione inventore pariatur maiores, qui libero delectus.
                             </textarea>
                     </div>
@@ -150,14 +151,14 @@
         // 1,点击发布按钮,获取form表单元素的所有input内容,
         // 封装
         function setarticle() {
-            
+
             // 实例化formdata对象
             var formdata = new FormData($("form")[0]);
             // 数据获取不全,追加数据
             // 追加富文本内容
-            formdata.append("content",tinyMCE.activeEditor.getContent());
+            formdata.append("content", tinyMCE.activeEditor.getContent());
             // 追加文章状态数据
-            formdata.append("state","草稿");
+            formdata.append("state", "草稿");
             // console.log(formdata);
             // ajax
             $.ajax({
@@ -166,16 +167,26 @@
                 data: formdata, contentType: false, processData: false,
                 success: function (dataBack) {
                     console.log(dataBack);
+                    // 发布成功后提示并,删除input内容
+                    if (dataBack.code == 201) {
+
+                        $("form input").val("");
+                        // 文本域中的内容也为空
+                        tinyMCE.activeEditor.setContent("");
+                        // img文件夹为默认图片
+                        $("#my_img").attr("src", "./images/2.jpg")
+                    };
 
                 }
 
             })
         }
+        
 
         $(".btn-success").on("click", function (e) {
             e.preventDefault();
             // 设置name属性
-            
+
             setarticle();
 
         });

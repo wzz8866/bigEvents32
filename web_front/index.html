@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <script src="./js/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -215,12 +216,56 @@
             <span>|</span>
             <a href="#">招聘人才</a>
             <span>|</span>
-            <a href="#">友情链接</a>		
+            <a href="#">友情链接</a>
         </div>
-        <p>CopyRight © 2019 深圳大事件信息技术股份有限公司   All Rights Reserved</p>
-        <p>电话：0755-****888    粤ICP备*******8号</p>
+        <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
+        <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
 
+    <!-- 自己的js代码 -->
+    <script src="./js/template-web.js"></script>
+    <script type="text/html" id="article">
+        {{each data}}
+            {{if $index==0}}
+                <li class="first">
+            {{else}}
+                <li>
+            {{/if}}
+                    <a href="#"><img src="{{$value.cover}}" alt=""></a>
+                    <p>{{$value.title}}</p>
+                </li>
+            
+        {{/each}}
+    </script>
+    <script>
+        $(function () {
+            // 请求地址：http://localhost:8000/admin/search
+            // 请求方式：get
+            // 请求参数：
+            // 名称	类型	说明
+            // key	string	搜索关键词，可以为空，为空返回某类型所有文章
+            // type	string	文章类型，可以为空，为空返回所有类型文章
+            // state	string	文章状态，草稿或者已发布
+            // page	number	当前页，为空返回第1页
+            // perpage	number	每页显示条数，为空默认每页6条
+            // id	number	文章id，根据id查询时，其余参数可以不选择
+            // 页面一打开调用文章搜索方法,渲染到页面上
+            $.ajax({
+                url: "http://localhost:8000/admin/search",
+                data: {
+                    page: 1,
+                    perpage: 5
+                },
+                success: function (dataBack) {
+                    // console.log(dataBack);
+                    // 模板引擎渲染
+                    var html = template("article", dataBack);
+                    $(".focus_list").html(html);
+
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
