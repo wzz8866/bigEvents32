@@ -67,8 +67,8 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容"
-                            value="文章内容" name="content">
+                        <input type="text" class="form-control" id="rich_content" placeholder="文章内容" value="文章内容"
+                            name="content">
                     </div>
                 </div>
                 <div class="form-group">
@@ -136,17 +136,17 @@
                     id: id
                 },
                 success: function (dataBack) {
-                    console.log(dataBack);
+                    // console.log(dataBack);
                     // 模板引擎
                     for (var key in dataBack.data) {
-                        if (key != "cover") {
-                            $("form input[name=" + key + "]").val(dataBack.data[key]);
-                        }
-                    };
+
+                        $("form input[name=" + key + "]").not("form input[name=cover]").val(dataBack.data[key]);
+
+                    }
                     $(".article_cover").attr("src", dataBack.data.cover);
 
                     // 选中返回数据中id显示在下拉框中
-                    $(".form-control").val(dataBack.data.type);
+                    $("#my_select").val(dataBack.data.type);
 
                 }
             });
