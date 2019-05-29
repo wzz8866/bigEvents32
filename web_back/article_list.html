@@ -300,7 +300,7 @@
 
 
                 <td class="text-center">
-                    <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                    <a href="article_edit.html?id={{$value.id}}" class="btn btn-default btn-xs" target="_blank">编辑</a>
                     <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
                 </td>
             </tr>
@@ -445,6 +445,9 @@
                     }
                 })
             };
+
+            
+            
 
 
         });
